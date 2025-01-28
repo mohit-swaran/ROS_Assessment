@@ -67,7 +67,7 @@
         <parent link="base_link"/>
         <child link="wheel_L_link"/>
         <axis xyz="0 0 1"/>
-        <origin xyz="0 0.225 -0.04" rpy="1.57 0 0"/>
+        <origin xyz="0 0.225 -0.03" rpy="1.57 0 0"/>
     </joint>
     
     <link name="wheel_L_link">
@@ -98,7 +98,7 @@
         <parent link="base_link"/>
         <child link="wheel_R_link"/>
         <axis xyz="0 0 1"/>
-        <origin xyz="0 -0.225 -0.04" rpy="1.57 0 0"/>
+        <origin xyz="0 -0.225 -0.03" rpy="1.57 0 0"/>
     </joint>
     
     <link name="wheel_R_link">
@@ -152,6 +152,12 @@
         </collision>
     </link>
 
+    <gazebo reference="caster_wheelF">
+        <material>Gazebo/White</material>
+        <mu1 value="0.001"/>
+        <mu2 value="0.001"/>
+    </gazebo>
+
     <joint name="caster_wheelB_joint" type="fixed">
         <parent link="base_link"/>
         <child link="caster_wheelB"/>
@@ -178,6 +184,12 @@
             </geometry>
         </collision>
     </link>
+
+    <gazebo reference="caster_wheelB">
+        <material>Gazebo/White</material>
+        <mu1 value="0.001"/>
+        <mu2 value="0.001"/>
+    </gazebo>
 
 
 
