@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <robot name="cafe_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    <xacro:include filename="inertial_macros.xacro"/>
+    <xacro:include filename="gazebo_plugins.xacro"/>
+    <xacro:include filename="inertial_macros.xacro"/>
+    
     <!--                Dimensions              -->
     <xacro:property name="chassis_length" value="0.45"/>
     <xacro:property name="chassis_width" value="0.4"/>
@@ -13,39 +17,6 @@
     <xacro:property name="support_radius" value="0.01"/>
     <xacro:property name="support_pos_z" value="0.425"/>
     
-    <!--                Macro for Defining Inertia                  -->
-    <xacro:macro name="sphere_inertia" params="mass radius *origin">
-        <inertial>
-            <xacro:insert_block name="origin"/>
-            <mass value="${mass}" />
-            <inertia ixx="${(2/5) * mass * (radius*radius)}" ixy="0.0" ixz="0.0"
-                    iyy="${(2/5) * mass * (radius*radius)}" iyz="0.0"
-                    izz="${(2/5) * mass * (radius*radius)}" />
-        </inertial>
-    </xacro:macro>  
-
-    <xacro:macro name="box_inertia" params="mass x y z *origin">
-        <inertial>
-            <xacro:insert_block name="origin"/>
-            <mass value="${mass}" />
-            <inertia ixx="${(1/12) * mass * (y*y+z*z)}" ixy="0.0" ixz="0.0"
-                    iyy="${(1/12) * mass * (x*x+z*z)}" iyz="0.0"
-                    izz="${(1/12) * mass * (x*x+y*y)}" />
-        </inertial>
-    </xacro:macro>
-
-
-    <xacro:macro name="cylinder_inertia" params="mass length radius *origin">
-        <inertial>
-            <xacro:insert_block name="origin"/>
-            <mass value="${mass}" />
-            <inertia ixx="${(1/12) * mass * (3*radius*radius + length*length)}" ixy="0.0" ixz="0.0"
-                    iyy="${(1/12) * mass * (3*radius*radius + length*length)}" iyz="0.0"
-                    izz="${(1/2) * mass * (radius*radius)}" />
-        </inertial>
-    </xacro:macro>
-
-
 
     <!--                Base Link               -->
     <link name="base_link"/>
@@ -69,11 +40,9 @@
     </joint>
 
     <link name="chassis_link">
-        <inertial>
-            <xacro:box_inertia mass="2.5" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:box_inertia>
-        </inertial>
+        <xacro:box_inertia mass="2.5" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:box_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -102,11 +71,9 @@
     </joint>
     
     <link name="wheel_L_link">
-        <inertial>
-            <xacro:cylinder_inertia mass="1.0" length="${wheel_thk}" radius="${wheel_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="1.0" length="${wheel_thk}" radius="${wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy=" 0.0 0.0 0.0"/>
             <geometry>
@@ -135,11 +102,9 @@
     </joint>
     
     <link name="wheel_R_link">
-        <inertial>
-            <xacro:cylinder_inertia mass="1.0" length="${wheel_thk}" radius="${wheel_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="1.0" length="${wheel_thk}" radius="${wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -167,11 +132,9 @@
     </joint>
     
     <link name="caster_wheelF">
-        <inertial>
-            <xacro:sphere_inertia mass="0.15" radius="0.03">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:sphere_inertia>
-        </inertial>
+        <xacro:sphere_inertia mass="0.15" radius="0.03">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:sphere_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy=" 0.0 0.0 0.0"/>
             <geometry>
@@ -196,11 +159,9 @@
     </joint>
     
     <link name="caster_wheelB">
-        <inertial>
-            <xacro:sphere_inertia mass="0.15" radius="0.03">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:sphere_inertia>
-        </inertial>
+        <xacro:sphere_inertia mass="0.15" radius="0.03">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:sphere_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy=" 0.0 0.0 0.0"/>
             <geometry>
@@ -228,11 +189,9 @@
     </joint>
     
     <link name="lidar_frame">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.200" length="${lidar_height}" radius="${lidar_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.200" length="${lidar_height}" radius="${lidar_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy=" 0.0 0.0 0.0"/>
             <geometry>
@@ -260,11 +219,9 @@
     </joint>
 
     <link name="support1">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -290,11 +247,9 @@
     </joint>
 
     <link name="support2">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -320,11 +275,9 @@
     </joint>
 
     <link name="support3">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -350,11 +303,9 @@
     </joint>
 
     <link name="support4">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.3" length="${support_height}" radius="${support_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -382,11 +333,9 @@
     </joint>
 
     <link name="level1">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -411,11 +360,9 @@
     </joint>
 
     <link name="level2">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -441,11 +388,9 @@
     </joint>
 
     <link name="level3">
-        <inertial>
-            <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-            </xacro:cylinder_inertia>
-        </inertial>
+        <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
@@ -462,66 +407,5 @@
             </geometry>
         </collision>
     </link>
-
-    <!--                Gazebo Plugins              -->
-    <gazebo reference="lidar_frame">
-
-        <sensor name="laser" type="gpu_lidar">
-            <pose> 0 0 0 0 0 0 </pose>
-            <visualize>false</visualize>
-            <update_rate>10</update_rate>
-            <lidar>
-                <scan>
-                    <horizontal>
-                        <samples>360</samples>
-                        <min_angle>-3.14</min_angle>
-                        <max_angle>3.14</max_angle>
-                    </horizontal>
-                </scan>
-                <range>
-                    <min>0.3</min>
-                    <max>12</max>
-                </range>
-            </lidar>
-            <topic>scan</topic>
-            <gz_frame_id>laser_frame</gz_frame_id>
-        </sensor>
-    </gazebo>
-
-    <gazebo>
-        <plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
-
-            <!-- Wheel Info -->
-            <left_joint>wheel_L_joint</left_joint>
-            <right_joint>wheel_R_joint</right_joint>
-            <wheel_separation>${chassis_width + wheel_thk}</wheel_separation>
-            <wheel_radius>${wheel_radius}</wheel_radius>
-
-
-            <!-- Limits -->
-            <max_linear_acceleration>0.33</max_linear_acceleration>
-
-            <!-- Input -->
-            <topic>cmd_vel</topic>
-
-            
-            <!-- Output -->
-            <frame_id>odom</frame_id>
-            <child_frame_id>base_link</child_frame_id>
-            <odom_topic>odom</odom_topic>
-            <odom_publisher_frequency>30</odom_publisher_frequency>
-            
-            <tf_topic>/tf</tf_topic>
-
-        </plugin>
-
-
-        <plugin filename="gz-sim-joint-state-publisher-system"
-            name="gz::sim::systems::JointStatePublisher">
-            <topic>joint_states</topic>
-            <joint_name>wheel_L_joint</joint_name>
-            <joint_name>wheel_R_joint</joint_name>
-        </plugin>
-    </gazebo>
 
 </robot>
