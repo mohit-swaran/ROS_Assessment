@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+import glob 
 
 package_name = 'cafe_robot_action_planning'
 
@@ -10,6 +11,11 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/urdf',glob.glob('robot_description/urdf/*')),
+        ('share/' + package_name + '/launch',glob.glob('launch/*')),
+        ('share/' + package_name + '/config',glob.glob('config/*')),
+        ('share/' + package_name + '/worlds',glob.glob('worlds/*'))
+        
     ],
     install_requires=['setuptools'],
     zip_safe=True,
