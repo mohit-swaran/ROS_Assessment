@@ -59,7 +59,10 @@
             </geometry>
         </collision>
     </link>
-    
+
+
+
+    <!--                Left Wheel Joint               -->
     <joint name="wheel_L_joint" type="continuous">
         <origin xyz="0 0.225 -0.03" rpy="-1.57 0.0 0.0"/>
         <parent link="base_link"/>
@@ -88,6 +91,9 @@
         </collision>
     </link>
 
+
+
+     <!--           Right Wheel Joint              -->
      <joint name="wheel_R_joint" type="continuous">
         <origin xyz="0 -0.225 -0.03" rpy="1.57 0.0 0.0"/>
         <parent link="base_link"/>
@@ -116,7 +122,7 @@
         </collision>
     </link>
 
-
+    
 
 
 
@@ -415,5 +421,33 @@
             </geometry>
         </collision>
     </link>
+
+    <joint name="misc_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="misc_link"/>
+        <origin xyz="0.2 0.0 0.075" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+     <link name="misc_link">
+        <xacro:sphere_inertia mass="0.05" radius="0.03">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:sphere_inertia>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy=" 0.0 0.0 0.0"/>
+            <geometry>
+                <sphere radius="0.03"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0.0 0.0 0.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <sphere radius="0.03"/>
+            </geometry>
+        </collision>
+    </link>
+    
 
 </robot>
