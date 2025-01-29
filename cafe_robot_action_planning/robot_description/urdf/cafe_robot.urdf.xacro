@@ -60,67 +60,63 @@
         </collision>
     </link>
     
-
-
-    <!--            Right Wheel Joint                -->
-    <joint name="wheel_R_joint" type="continuous">
-        <parent link="base_link"/>
-        <child link="wheel_R_link"/>
-        <axis xyz="0 0 1"/>
-        <origin xyz="0 0.225 -0.03" rpy="1.57 0 0"/>
-    </joint>
-    
-    <link name="wheel_L_link">
-        <xacro:cylinder_inertia mass="1.0" length="${wheel_thk}" radius="${wheel_radius}">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:cylinder_inertia>
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy=" 0.0 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/> 
-            </geometry>
-            <material name="grey">
-                <color rgba="0.1 0.7 0.7 1.0"/>
-            </material>
-        </visual>
-        <collision>
-            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/> 
-            </geometry>
-        </collision>
-    </link>
-
-
-
-    <!--                Left Wheel Joint               -->
     <joint name="wheel_L_joint" type="continuous">
+        <origin xyz="0 0.225 -0.03" rpy="-1.57 0.0 0.0"/>
         <parent link="base_link"/>
         <child link="wheel_L_link"/>
         <axis xyz="0 0 1"/>
-        <origin xyz="0 -0.225 -0.03" rpy="1.57 0 0"/>
     </joint>
-    
-    <link name="wheel_R_link">
-        <xacro:cylinder_inertia mass="1.0" length="${wheel_thk}" radius="${wheel_radius}">
+
+    <link name="wheel_L_link">
+        <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:cylinder_inertia>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/> 
+                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/>
             </geometry>
-            <material name="grey">
+            <material name="goat">
                 <color rgba="0.1 0.7 0.7 1.0"/>
             </material>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/> 
+                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/>
             </geometry>
         </collision>
     </link>
+
+     <joint name="wheel_R_joint" type="continuous">
+        <origin xyz="0 -0.225 -0.03" rpy="1.57 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="wheel_R_link"/>
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <link name="wheel_R_link">
+        <xacro:cylinder_inertia mass="0.3" length="${wheel_thk}" radius="${wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:cylinder_inertia>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/>
+            </geometry>
+            <material name="goat">
+                <color rgba="0.1 0.7 0.7 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_thk}"/>
+            </geometry>
+        </collision>
+    </link>
+
+
 
 
 
