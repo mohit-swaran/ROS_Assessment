@@ -91,6 +91,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        laser_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         level1:
           Alpha: 1
           Show Axes: false
@@ -102,11 +107,6 @@ Visualization Manager:
           Show Trail: false
           Value: true
         level3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        lidar_frame:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -166,13 +166,15 @@ Visualization Manager:
           Value: true
         chassis_link:
           Value: true
+        laser_frame:
+          Value: true
         level1:
           Value: true
         level2:
           Value: true
         level3:
           Value: true
-        lidar_frame:
+        odom:
           Value: true
         support1:
           Value: true
@@ -201,13 +203,13 @@ Visualization Manager:
             {}
           chassis_link:
             {}
+          laser_frame:
+            {}
           level1:
             {}
           level2:
             {}
           level3:
-            {}
-          lidar_frame:
             {}
           support1:
             {}
@@ -221,6 +223,8 @@ Visualization Manager:
             {}
           wheel_R_link:
             {}
+        odom:
+          {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -253,7 +257,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: ""
+        Value: /scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true

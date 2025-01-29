@@ -40,7 +40,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py'
         )]),
-        launch_arguments={'gz_args': ['-r -v4', world], 'on_exit_shutdown': 'true'}.items()
+        launch_arguments={'gz_args': {default_world}, 'on_exit_shutdown': 'true'}.items()
     )
 
     # Spawn robot entity in Gazebo
@@ -50,7 +50,7 @@ def generate_launch_description():
         arguments=[
             '-topic', 'robot_description',
             '-name', 'cafe_robot',
-            '-z', '0.5'
+            '-z', '0.2'
         ],
         output='screen',
         parameters=[

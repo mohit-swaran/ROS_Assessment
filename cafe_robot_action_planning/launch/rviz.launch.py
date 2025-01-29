@@ -31,7 +31,8 @@ def generate_launch_description():
             executable='rviz2',
             name='rviz2',
             arguments=['-d', rviz_config_file], 
-            output='screen'
+            output='screen',
+            parameters=[{'use_sim_time': True}]
         ),
 
         # Joint State Publisher GUI node
