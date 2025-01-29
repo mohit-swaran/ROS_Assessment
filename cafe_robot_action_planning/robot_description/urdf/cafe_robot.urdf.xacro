@@ -62,10 +62,10 @@
     
 
 
-    <!--            Left Wheel Joint                -->
-    <joint name="wheel_L_joint" type="continuous">
+    <!--            Right Wheel Joint                -->
+    <joint name="wheel_R_joint" type="continuous">
         <parent link="base_link"/>
-        <child link="wheel_L_link"/>
+        <child link="wheel_R_link"/>
         <axis xyz="0 0 1"/>
         <origin xyz="0 0.225 -0.03" rpy="1.57 0 0"/>
     </joint>
@@ -93,10 +93,10 @@
 
 
 
-    <!--                Right Wheel Joint               -->
-    <joint name="wheel_R_joint" type="continuous">
+    <!--                Left Wheel Joint               -->
+    <joint name="wheel_L_joint" type="continuous">
         <parent link="base_link"/>
-        <child link="wheel_R_link"/>
+        <child link="wheel_L_link"/>
         <axis xyz="0 0 1"/>
         <origin xyz="0 -0.225 -0.03" rpy="1.57 0 0"/>
     </joint>
@@ -196,7 +196,7 @@
     <!--                Laser joint & link              -->
     <joint name="lidar_joint" type="fixed">
         <parent link="base_link"/>
-        <child link="lidar_frame"/>
+        <child link="laser_frame"/>
         <origin xyz="0 0 0.125" rpy="0.0 0 0"/>
     </joint>
     
