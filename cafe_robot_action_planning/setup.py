@@ -14,7 +14,8 @@ setup(
         ('share/' + package_name + '/urdf',glob.glob('robot_description/urdf/*')),
         ('share/' + package_name + '/launch',glob.glob('launch/*')),
         ('share/' + package_name + '/config',glob.glob('config/*')),
-        ('share/' + package_name + '/worlds',glob.glob('worlds/*'))
+        ('share/' + package_name + '/worlds',glob.glob('worlds/*')),
+        ('share/' + package_name + '/maps',glob.glob('maps/*'))
         
     ],
     install_requires=['setuptools'],
