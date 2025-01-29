@@ -18,7 +18,6 @@ def generate_launch_description():
     
     robot_description = xacro.process_file(xacro_file).toxml()
 
-
     # Default world file
     default_world = os.path.join(
         get_package_share_directory(pkg_name),
@@ -33,7 +32,6 @@ def generate_launch_description():
         description='Specify the world in CLI or it opens empty_world'
     )
 
-    
     world = LaunchConfiguration('world')
 
     # Include Gazebo launch file with proper argument substitution
@@ -51,7 +49,10 @@ def generate_launch_description():
         arguments=[
             '-topic', 'robot_description',
             '-name', 'cafe_robot',
-            '-z', '0.2'
+            '-x', '-2.15',
+            '-y', '-4.0',
+            '-z', '0.5',
+            '-Y', '1.57',
         ],
         output='screen',
         parameters=[
