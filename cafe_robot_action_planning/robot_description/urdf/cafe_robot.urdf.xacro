@@ -126,7 +126,7 @@
 
     <!--                Caster wheel joints & links              -->
     <joint name="caster_wheelF_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="caster_wheelF"/>
         <origin xyz="0.15 0 -0.1" rpy="0.0 0 0"/>
     </joint>
@@ -159,7 +159,7 @@
     </gazebo>
 
     <joint name="caster_wheelB_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="caster_wheelB"/>
         <origin xyz="-0.15 0 -0.1" rpy="0.0 0 0"/>
     </joint>
@@ -195,12 +195,12 @@
 
     <!--                Laser joint & link              -->
     <joint name="lidar_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="laser_frame"/>
         <origin xyz="0 0 0.125" rpy="0.0 0 0"/>
     </joint>
     
-    <link name="lidar_frame">
+    <link name="laser_frame">
         <xacro:cylinder_inertia mass="0.200" length="${lidar_height}" radius="${lidar_radius}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:cylinder_inertia>
@@ -225,7 +225,7 @@
 
     <!--            Support Frames              -->
     <joint name="support1_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="support1"/>
         <origin xyz="0.18 0.15 ${support_pos_z}" rpy="0.0 0.0 0.0"/>
     </joint>
@@ -253,7 +253,7 @@
     </link>
 
     <joint name="support2_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="support2"/>
         <origin xyz="-0.18 -0.15 ${support_pos_z}" rpy="0.0 0.0 0.0"/>
     </joint>
@@ -281,7 +281,7 @@
     </link>
     
     <joint name="support3_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="support3"/>
         <origin xyz="-0.18 0.15 ${support_pos_z}" rpy="0.0 0.0 0.0"/>
     </joint>
@@ -309,7 +309,7 @@
     </link>
 
     <joint name="support4_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="support4"/>
         <origin xyz="0.18 -0.15 ${support_pos_z}" rpy="0.0 0.0 0.0"/>
     </joint>
@@ -339,7 +339,7 @@
 
     <!--                Level Frames              -->
     <joint name="level1_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="level1"/>
         <origin xyz="0 0 0.25" rpy="0.0 0.0 0.0"/>
     </joint>
@@ -366,7 +366,7 @@
     </link>
 
     <joint name="level2_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="level2"/>
         <origin xyz="0 0 0.5" rpy="0.0 0.0 0.0"/>
     </joint>
@@ -394,7 +394,7 @@
 
 
     <joint name="level3_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis_link"/>
         <child link="level3"/>
         <origin xyz="0 0 0.75" rpy="0.0 0.0 0.0"/>
     </joint>

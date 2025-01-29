@@ -1,5 +1,5 @@
 import os
-
+import xacro
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
@@ -10,13 +10,14 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     pkg_name = 'cafe_robot_action_planning'
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
-    # Include rviz launch file
-    rsp = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory(pkg_name), 'launch', 'rviz.launch.py'
-        )])
-    )
+    # Process the URDF file using xacro
+    pkg_path = os.path.join(get_package_share_directory(pkg_name))
+    xacro_file = os.path.join(pkg_path, 'urdf', 'cafe_robot.urdf.xacro')
+    
+    robot_description = xacro.process_file(xacro_file).toxml()
+
 
     # Default world file
     default_world = os.path.join(
@@ -40,7 +41,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py'
         )]),
-        launch_arguments={'gz_args': {default_world}, 'on_exit_shutdown': 'true'}.items()
+        launch_arguments={'gz_args': ['-r -v4 ', world], 'on_exit_shutdown': 'true'}.items()
     )
 
     # Spawn robot entity in Gazebo
@@ -72,6 +73,15 @@ def generate_launch_description():
         ]
     )
 
+    params = {'robot_description': robot_description, 'use_sim_time': use_sim_time}
+    rsp = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[params]
+    )
+
+
     # Return the LaunchDescription
     return LaunchDescription([
         rsp,
@@ -79,4 +89,10 @@ def generate_launch_description():
         world_arg,
         spawn_entity,
         ros_gz_bridge,
+        DeclareLaunchArgument(
+            'use_sim_time',
+            default_value='false',
+            description='Use sim time if true'
+        ),
+        
     ])

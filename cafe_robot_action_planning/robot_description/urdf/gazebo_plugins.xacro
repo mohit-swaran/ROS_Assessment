@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="cafe_robot">
 
     <!--                Gazebo Plugins              -->
-    <gazebo reference="lidar_frame">
+    <gazebo reference="laser_frame">
         <material>Gazebo/Black</material>
 
         <sensor name="laser" type="gpu_lidar">
@@ -23,10 +23,11 @@
                 </range>
             </lidar>
             <topic>scan</topic>
-            <gz_frame_id>lidar_frame</gz_frame_id>
+            <gz_frame_id>laser_frame</gz_frame_id>
         </sensor>
     </gazebo>
 
+    
     <gazebo>
         <plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
 

@@ -14,7 +14,7 @@ def generate_launch_description():
     # Xacro file to generate URDF
     robot_description_config = xacro.process_file(xacro_file)
     robot_description = robot_description_config.toxml()
-
+    params = {'robot_description': robot_description, 'use_sim_time': True}
     return LaunchDescription([
         # Robot State Publisher node
         Node(
@@ -22,7 +22,7 @@ def generate_launch_description():
             executable='robot_state_publisher',
             name='robot_state_publisher',
             output='screen',
-            parameters=[{'robot_description': robot_description}]
+            parameters=[params]
         ),
 
         # RViz2 node 
@@ -32,7 +32,7 @@ def generate_launch_description():
             name='rviz2',
             arguments=['-d', rviz_config_file], 
             output='screen',
-            parameters=[{'use_sim_time': True}]
+            parameters=[{'use_sim_time': True},]
         ),
 
         # Joint State Publisher GUI node
