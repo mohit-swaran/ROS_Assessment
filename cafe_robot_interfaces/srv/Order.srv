@@ -1,0 +1,5 @@
+int32 table_number
+string request_type  # "new", "cancel", "status"
+---
+bool accepted
+string response_message
