@@ -1,5 +1,6 @@
 int32 table_number
-string request_type  # "new", "cancel", "status"
+string request_type  # "place", "cancel", "status"
+string status
 ---
 bool accepted
 string response_message
