@@ -1,0 +1,9 @@
+.vscode/settings.json
+.vscode/c_cpp_properties.json
+cafe_robot_action_planning/cafe_robot_action_planning/__pycache__/__init__.cpython-312.pyc
+
+__pycache__/
+*.pyc
+*.pyo
+
+.vscode/

@@ -31,7 +31,7 @@ def generate_launch_description():
         default_value=default_world,
         description='Specify the world in CLI or it opens empty_world'
     )
-
+    
     world = LaunchConfiguration('world')
 
     # Include Gazebo launch file with proper argument substitution
@@ -81,7 +81,11 @@ def generate_launch_description():
         output='screen',
         parameters=[params]
     )
-
+    order_manager = Node(
+        package=pkg_name,
+        executable='order_manager',
+        output='screen',
+    )
 
     # Return the LaunchDescription
     return LaunchDescription([
@@ -90,6 +94,7 @@ def generate_launch_description():
         world_arg,
         spawn_entity,
         ros_gz_bridge,
+        order_manager,
         DeclareLaunchArgument(
             'use_sim_time',
             default_value='false',
