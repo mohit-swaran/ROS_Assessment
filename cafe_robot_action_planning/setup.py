@@ -15,7 +15,7 @@ setup(
         ('share/' + package_name + '/launch',glob.glob('launch/*')),
         ('share/' + package_name + '/config',glob.glob('config/*')),
         ('share/' + package_name + '/worlds',glob.glob('worlds/*')),
-        ('share/' + package_name + '/maps',glob.glob('maps/*'))
+        ('share/' + package_name + '/maps',glob.glob('maps/*')),
         
     ],
     install_requires=['setuptools'],
@@ -27,6 +27,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            "robot_navigator=cafe_robot_action_planning.robot_navigator:main",
+            "order_manager=cafe_robot_action_planning.order_manager:main",
         ],
     },
 )
