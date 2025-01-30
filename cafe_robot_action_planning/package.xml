@@ -4,10 +4,11 @@
   <name>cafe_robot_action_planning</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="mohit@todo.todo">mohit</maintainer>
+  <maintainer email="mohit.swaran@gmail.com">mohit</maintainer>
   <license>TODO: License declaration</license>
 
   <depend>rclpy</depend>
+  <depend>cafe_robot_interfaces</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
