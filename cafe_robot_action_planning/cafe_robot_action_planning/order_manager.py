@@ -23,6 +23,8 @@ class OrderManager(Node):
             return self.get_order_status(response)
         elif request.request_type == "update":
             return self.update_order_status(request, response)
+        elif request.request_type == "cancel":
+            return self.cancel_order(request,response)
         else:
             response.accepted = False
             response.response_message = "Invalid request type."
@@ -44,6 +46,24 @@ class OrderManager(Node):
             response.accepted = True
             response.response_message = f"Order for Table {table_number} has been placed."
             self.get_logger().info(response.response_message)
+
+        return response
+    
+    def cancel_order(self, request, response):
+        """
+        Cancels an active order if it exists.
+        """
+        table_number = request.table_number
+
+        if table_number in self.orders and self.orders[table_number] not in ["completed", "cancelled"]:
+            self.orders[table_number] = "cancelled"
+            response.accepted = True
+            response.response_message = f"Order for Table {table_number} has been cancelled."
+            self.get_logger().info(response.response_message)
+        else:
+            response.accepted = False
+            response.response_message = f"No active order found for Table {table_number} to cancel."
+            self.get_logger().warn(response.response_message)
 
         return response
 
