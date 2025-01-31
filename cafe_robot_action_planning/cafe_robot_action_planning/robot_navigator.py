@@ -31,8 +31,8 @@ class RobotNavigator(Node):
         }
         self.navigator.setInitialPose(self.poses['home'])
 
-        # Start a timer to periodically check for new orders
-        self.create_timer(2.0, self.check_for_orders)
+        # Timer for checking new orders
+        self.create_timer(0.2, self.check_for_orders)
 
     def set_pose(self, x, y, yaw):
         """Helper function to create PoseStamped from coordinates."""
@@ -69,6 +69,11 @@ class RobotNavigator(Node):
         except Exception as e:
             self.get_logger().error(f'Service call failed: {e}')
 
+
+    # Order of Sequence 
+        #when ordere received 
+            # Home -> Kitchen -> Confirmation from kitchen -> Ordered Table number -> Return to home
+
     def process_order(self, table_number):
         """Handles the delivery process for a specific table."""
         table_key = f"table{table_number}"
@@ -99,6 +104,15 @@ class RobotNavigator(Node):
         # Navigate to the kitchen
         if not self.navigate_to("kitchen"):
             return
+        
+        # Check if order is confirmed or rejected 
+        self.get_logger().info("Arrived at the kitchen. Waiting for confirmation...")
+        # Simulating the confirmation in the kitchen
+        
+        if not self.check_order_confirmation(table_number):
+            self.get_logger().info(f"Order for Table {table_number} was rejected. Cancelling delivery.")
+            self.navigate_to("home")
+            return 
 
         # Simulate food pickup at the kitchen
         self.get_logger().info("Picking up food...")
@@ -141,6 +155,37 @@ class RobotNavigator(Node):
         else:
             self.get_logger().error(f"Failed to reach {location}.")
             return False
+    
+
+    def check_order_confirmation(self, table_number, timeout_sec=5):
+        """Waits for confirmation of the order before proceeding."""
+        request = Order.Request()
+        request.table_number = table_number
+        request.request_type = "status"  
+
+        start_time = self.get_clock().now()
+
+        while (self.get_clock().now() - start_time).nanoseconds / 1e9 < timeout_sec:
+            future = self.client.call_async(request)
+            rclpy.spin_until_future_complete(self, future)
+
+            if future.result() is not None:
+                orders = eval(future.result().response_message)  # Convert string to dictionary
+                status = orders.get(table_number, "")
+
+                if status == "confirmed":
+                    self.get_logger().info(f"Order for Table {table_number} is confirmed. Proceeding with delivery.")
+                    return True
+                elif status == "rejected":
+                    self.get_logger().warn(f"Order for Table {table_number} was rejected. Cancelling delivery.")
+                    return False  # Exit process if order is rejected
+
+            self.get_logger().info(f"Waiting for confirmation... (Current status: {status})")
+            time.sleep(1)  # Check again after 1 second
+
+        self.get_logger().warn(f"Timeout reached! No confirmation received for Table {table_number}. Cancelling order.")
+        return False
+
 
 def main(args=None):
     rclpy.init(args=args)

@@ -73,6 +73,31 @@ class OrderManager(Node):
             self.get_logger().warn(response.response_message)
 
         return response
+    
+    def confirm_order(self, request, response):
+        """
+        Confirms or rejects the order for a given table.
+        """
+        table_number = request.table_number
+        accepted = request.accepted
+
+        if table_number in self.orders:
+            if accepted:
+                self.orders[table_number] = "confirmed"
+                response.accepted = True
+                response.response_message = f"Order for Table {table_number} confirmed."
+                self.get_logger().info(f"Order for Table {table_number} confirmed.")
+            else:
+                self.orders[table_number] = "rejected"
+                response.accepted = False
+                response.response_message = f"Order for Table {table_number} rejected."
+                self.get_logger().info(f"Order for Table {table_number} rejected.")
+        else:
+            response.accepted = False
+            response.response_message = f"No order found for Table {table_number}."
+            self.get_logger().warn(f"No order found for Table {table_number}.")
+
+        return response
 
 def main(args=None):
     rclpy.init(args=args)
