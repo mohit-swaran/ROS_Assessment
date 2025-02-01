@@ -127,7 +127,7 @@ ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number:
 ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'cancel'}""
 ```
 ## FlowChart 
-
+```mermaid
 graph TD;
     A(Start) -->|Receive Order| B{Order Assigned?}
     B -->|Yes| C(Go to Kitchen)
@@ -144,7 +144,7 @@ graph TD;
     I -->|No Timeout| E
     
     G -->|New Order| B
-
+```
 
 ## Nav2 Simple Commander API for Robot Navigator 
 
