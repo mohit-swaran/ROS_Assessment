@@ -1,23 +1,5 @@
 #!/usr/bin/env python3
 
-# Cafe Robot Task update 
-# --> Ordder with all confirmation 
-# --> Kitchen Timeout
-# --> Table Timeout
-
-# Order of Sequence 
-#       when order received 
-#        All Confirmation
-#               Home -> Kitchen -> Confirmation from kitchen -> Navigates to Ordered Table number -> Confirmation from table -> Return to home
-#                                       (Confirmed)                                                         (Confirmed) 
-#       Kitchen Timeout
-#               Home -> Kitchen -> Confirmation from kitchen -> Returns to home
-#                                       (not confirmed)
-#       Table Timeout
-#              Home -> Kitchen -> Confirmation from kitchen -> Navigates to Ordered Table number -> Confirmation from table -> Return food to the Kitchen -> Return to home
-#                                       (Confirmed)                                                     (not confirmed)
-
-
 import rclpy
 from rclpy.node import Node
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
@@ -64,7 +46,7 @@ class RobotNavigator(Node):
 
     def check_for_orders(self):
         """Periodically checks for new orders."""
-        # self.get_logger().info("Checking for new orders...")
+        self.get_logger().info("Checking for new orders...")
 
         # Request the status of all orders
         request = Order.Request()
@@ -82,16 +64,16 @@ class RobotNavigator(Node):
                 for table_number, status in orders.items():
                     if status == "pending":
                         self.process_order(int(table_number))
-                    elif status == "cancelled":
-                        self.get_logger().info(f"Order for Table {table_number} has been cancelled. Returning home.")
-                        self.navigate_to("home")
             else:
                 self.get_logger().warn('Failed to retrieve order status.')
         except Exception as e:
             self.get_logger().error(f'Service call failed: {e}')
 
 
-    
+    # Order of Sequence 
+        #when ordere received 
+            # Home -> Kitchen -> Confirmation from kitchen -> Ordered Table number -> Return to home
+
     def process_order(self, table_number):
         """Handles the delivery process for a specific table."""
         table_key = f"table{table_number}"
@@ -102,13 +84,7 @@ class RobotNavigator(Node):
 
         self.get_logger().info(f"Processing order for Table {table_number}...")
 
-        # Check for order cancellation before proceeding
-        if self.check_order_cancellation(table_number):
-            self.get_logger().info(f"Order for Table {table_number} has been cancelled. Returning home.")
-            self.navigate_to("home")
-            return
-
-        # Update order status to 'in_progress'
+        # Update the order status to 'in_progress'
         request = Order.Request()
         request.table_number = table_number
         request.request_type = "update"
@@ -128,12 +104,15 @@ class RobotNavigator(Node):
         # Navigate to the kitchen
         if not self.navigate_to("kitchen"):
             return
-
-        # Check again for cancellation before proceeding
-        if self.check_order_cancellation(table_number):
-            self.get_logger().info(f"Order for Table {table_number} has been cancelled. Returning home.")
+        
+        # Check if order is confirmed or rejected 
+        self.get_logger().info("Arrived at the kitchen. Waiting for confirmation...")
+        # Simulating the confirmation in the kitchen
+        
+        if not self.check_order_confirmation(table_number):
+            self.get_logger().info(f"Order for Table {table_number} was rejected. Cancelling delivery.")
             self.navigate_to("home")
-            return
+            return 
 
         # Simulate food pickup at the kitchen
         self.get_logger().info("Picking up food...")
@@ -143,18 +122,19 @@ class RobotNavigator(Node):
         if not self.navigate_to(table_key):
             return
 
-        # Final confirmation check at the table
-        if not self.check_order_confirmation(table_number):
-            self.get_logger().info(f"Order for Table {table_number} was not confirmed. Returning home.")
-            self.navigate_to("home")
-            return 
-
         # Simulate food delivery
         self.get_logger().info("Delivering food...")
         time.sleep(2)
 
-        # Update order status to 'completed'
-        self.update_order_status(table_number, "completed")
+        # Update the order status to 'completed'
+        request.status = "completed"
+        future = self.client.call_async(request)
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result() is not None and future.result().accepted:
+            self.get_logger().info(f"Order for Table {table_number} has been completed.")
+        else:
+            self.get_logger().warn(f"Failed to update order status for Table {table_number}.")
 
         # Return to home
         self.navigate_to("home")
@@ -165,8 +145,8 @@ class RobotNavigator(Node):
 
         while not self.navigator.isTaskComplete():
             feedback = self.navigator.getFeedback()
-            # if feedback:
-            #     self.get_logger().info(f'Navigating to {location}: {feedback.distance_remaining:.2f} meters remaining.')
+            if feedback:
+                self.get_logger().info(f'Navigating to {location}: {feedback.distance_remaining:.2f} meters remaining.')
 
         result = self.navigator.getResult()
         if result == TaskResult.SUCCEEDED:
@@ -177,7 +157,7 @@ class RobotNavigator(Node):
             return False
     
 
-    def check_order_confirmation(self, table_number, timeout_sec=10):
+    def check_order_confirmation(self, table_number, timeout_sec=5):
         """Waits for confirmation of the order before proceeding."""
         request = Order.Request()
         request.table_number = table_number
@@ -195,7 +175,6 @@ class RobotNavigator(Node):
 
                 if status == "confirmed":
                     self.get_logger().info(f"Order for Table {table_number} is confirmed. Proceeding with delivery.")
-                    self.update_order_status(table_number, "in_progress") 
                     return True
                 elif status == "rejected":
                     self.get_logger().warn(f"Order for Table {table_number} was rejected. Cancelling delivery.")
@@ -206,40 +185,7 @@ class RobotNavigator(Node):
 
         self.get_logger().warn(f"Timeout reached! No confirmation received for Table {table_number}. Cancelling order.")
         return False
-    
-    def check_order_cancellation(self, table_number):
-        """Checks if an order has been cancelled before proceeding."""
-        request = Order.Request()
-        request.table_number = table_number
-        request.request_type = "status"
 
-        future = self.client.call_async(request)
-        rclpy.spin_until_future_complete(self, future)
-
-        if future.result() is not None:
-            orders = eval(future.result().response_message)  # Convert string to dictionary
-            status = orders.get(str(table_number), "")
-
-            if status == "cancelled":
-                self.get_logger().warn(f"Order for Table {table_number} has been cancelled!")
-                return True  # Order is cancelled, return immediately
-
-        return False  # Order is still active   
-
-    def update_order_status(self, table_number, new_status):
-        """Updates the order status using the order_manager service."""
-        request = Order.Request()
-        request.table_number = table_number
-        request.request_type = "update"
-        request.status = new_status
-
-        future = self.client.call_async(request)
-        rclpy.spin_until_future_complete(self, future)
-
-        if future.result() is not None and future.result().accepted:
-            self.get_logger().info(f"Order for Table {table_number} updated to '{new_status}'.")
-        else:
-            self.get_logger().warn(f"Failed to update order status for Table {table_number}.")
 
 def main(args=None):
     rclpy.init(args=args)
