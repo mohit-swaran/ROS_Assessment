@@ -97,25 +97,42 @@ ros2 launch cafe_robot_action_planning bringup.launch.py params_file:= path_to_p
 ```code 
 ros2 run cafe_robot_action_planning robot_navigator --ros-args --remap use_sim_time:=true
 ```
+
+**Note : Replace the path_to_package to your saved package location & follow the sequence order to launch the files**
+#### Robot Navigator node
+
 ## Running the Simulation 
 
 After launching the every node, the robot starts to localize the map.
 
-## To place the order 
+### To place the order 
 
 ```code
 ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type: 'place'}"
 ```
-## To confirm the order
+### To confirm the order
 ```code
 ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'update',status = 'confirm'}""
 ```
+### To see the order status 
 
-**Note : Replace the path_to_package to your saved package location & follow the sequence order to launch the files**
+```code
+ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'status'}""
+```
+### To cancel the order 
 
-### Completed Tasks 
+```code
+ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'cancel'}""
+```
+## FlowChart 
+
+*yet to fill*
+
+
+
+### Completed Tasks (4/7)
 
 - [x] All confirmation - [Demo Video](https://drive.google.com/file/d/13cnn5r5En75oTlICvUAAreVMN740Y1ZH/view?usp=sharing)
 - [x] Kitchen Timeout - [Demo Video](https://drive.google.com/file/d/1gbKPs_Z_bu9vf_ctNup0lEPHf4M_PuHu/view?usp=sharing)
 - [x] Table Timeout - [Demo Video](https://drive.google.com/file/d/12aKdaSzQb7H8-9MI3qh9AY9KAvmfxUVx/view?usp=sharing)
-  
+- [X] Order Cancellation 
