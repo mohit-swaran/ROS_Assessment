@@ -24,7 +24,9 @@ class OrderManager(Node):
         elif request.request_type == "update":
             return self.update_order_status(request, response)
         elif request.request_type == "cancel":
-            return self.cancel_order(request,response)
+            return self.cancel_order(request, response)
+        elif request.request_type == "reset":
+            return self.reset_orders(response)
         else:
             response.accepted = False
             response.response_message = "Invalid request type."
@@ -94,6 +96,17 @@ class OrderManager(Node):
 
         return response
     
+    def reset_orders(self, response):
+        """
+        Resets all orders to the default state (e.g., 'pending').
+        """
+        self.orders = {}  # Clear all orders
+        response.accepted = True
+        response.response_message = "All orders have been reset to default state."
+        self.get_logger().info("All orders have been reset.")
+
+        return response
+
     def confirm_order(self, request, response):
         """
         Confirms or rejects the order for a given table.

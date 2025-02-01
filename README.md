@@ -6,7 +6,9 @@
 
 ![](./images/thnail.png)
 
-### Package Structure
+## Package Structure
+
+
 - [cafe_robot_action_planning](./cafe_robot_action_planning/)
 - [cafe_robot_interfaces](./cafe_robot_interfaces/)
   - [cafe_robot_interfaces](./cafe_robot_interfaces/cafe_robot_interfaces/)
@@ -126,13 +128,36 @@ ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number:
 ```
 ## FlowChart 
 
-*yet to fill*
+graph TD;
+    A(Start) -->|Receive Order| B{Order Assigned?}
+    B -->|Yes| C(Go to Kitchen)
+    C --> D{Order Cancelled?}
+    
+    D -->|Yes| E(Return Home)
+    E --> F{Home Reached?}
+    F -->|Yes| G(Wait for Next Order)
+    
+    D -->|No| H(Go to Table)
+    H --> I{Order Confirmed?}
+    I -->|Yes - Deliver Order| J(Return Home)
+    
+    I -->|No Timeout| E
+    
+    G -->|New Order| B
 
 
+## Nav2 Simple Commander API for Robot Navigator 
 
-### Completed Tasks (4/7)
+The RobotNavigator node is responsible for handling the order-based movement of a cafe robot, ensuring it follows a structured sequence for food delivery. It uses the Nav2 Simple Commander API to execute navigation tasks.The Simple Commander API in Nav2 is chosen for scenarios like the butler robot's navigation system due to its ability to facilitate efficient parallel processing within a single thread. 
+
+- Easy Navigation Control
+- Real-time Feedback
+- Task Cancellation
+- Simplified Code
+
+### Completed Tasks 
 
 - [x] All confirmation - [Demo Video](https://drive.google.com/file/d/13cnn5r5En75oTlICvUAAreVMN740Y1ZH/view?usp=sharing)
 - [x] Kitchen Timeout - [Demo Video](https://drive.google.com/file/d/1gbKPs_Z_bu9vf_ctNup0lEPHf4M_PuHu/view?usp=sharing)
 - [x] Table Timeout - [Demo Video](https://drive.google.com/file/d/12aKdaSzQb7H8-9MI3qh9AY9KAvmfxUVx/view?usp=sharing)
-- [X] Order Cancellation 
+- [X] Order Cancellation [Demo video](https://drive.google.com/file/d/1kTmgUASYhLt790qmtwxGcQ2FuEPRr07K/view?usp=sharing)

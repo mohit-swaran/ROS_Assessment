@@ -30,7 +30,7 @@ class RobotNavigator(Node):
             "table3": self.set_pose(3.3, -8.0, 0.0)
         }
         self.navigator.setInitialPose(self.poses['home'])
-
+        self.current_pose = None
         # Timer for checking new orders
         self.create_timer(0.2, self.check_for_orders)
 
@@ -64,6 +64,14 @@ class RobotNavigator(Node):
                 for table_number, status in orders.items():
                     if status == "pending":
                         self.process_order(int(table_number))
+                    if status == "cancelled":
+                        if self.current_pose == "kitchen":
+                            self.navigate_to("home")
+                        elif self.current_pose == "table":
+                            self.navigate_to("kitchen")
+                            self.navigate_to("home")
+                        self.navigate_to("home")
+                        
             else:
                 self.get_logger().warn('Failed to retrieve order status.')
         except Exception as e:
@@ -100,7 +108,7 @@ class RobotNavigator(Node):
             return
 
         self.navigator.waitUntilNav2Active()
-
+        self.current_pose = "Going to kitchen"
         # Navigate to the kitchen
         if not self.navigate_to("kitchen"):
             return
@@ -117,7 +125,7 @@ class RobotNavigator(Node):
         # Simulate food pickup at the kitchen
         self.get_logger().info("Picking up food...")
         time.sleep(2)
-
+        self.current_pose = "Going to table"
         # Navigate to the assigned table
         if not self.navigate_to(table_key):
             return
@@ -138,6 +146,7 @@ class RobotNavigator(Node):
 
         # Return to home
         self.navigate_to("home")
+        self.current_pose = None
 
     def navigate_to(self, location):
         """Handles navigation with feedback and logging."""
