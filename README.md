@@ -9,34 +9,78 @@
 ## Package Structure
 
 
-- [cafe_robot_action_planning](./cafe_robot_action_planning/)
-- [cafe_robot_interfaces](./cafe_robot_interfaces/)
-  - [cafe_robot_interfaces](./cafe_robot_interfaces/cafe_robot_interfaces/)
-    - [order_manager.py](./cafe_robot_interfaces/cafe_robot_interfaces/order_manager.py)
-    - [robot_navigator.py](./cafe_robot_interfaces/cafe_robot_interfaces/robot_navigator.py)
-  - [config](./cafe_robot_interfaces/config/)
-    - [bridge_params.yaml](./cafe_robot_interfaces/config/bridge_params.yaml)
-    - [cafe_robot_config.rviz](./cafe_robot_interfaces/config/cafe_robot_config.rviz)
-    - [nav2_default_view.rviz](./cafe_robot_interfaces/config/nav2_default_view.rviz)
-    - [nav2_params.yaml](./cafe_robot_interfaces/config/nav2_params.yaml)
-  - [launch](./cafe_robot_interfaces/launch/)
-    - [bringup_launch.py](./cafe_robot_interfaces/launch/bringup_launch.py)
-    - [gazebo.launch.py](./cafe_robot_interfaces/launch/gazebo.launch.py)
-    - [localization_launch.py](./cafe_robot_interfaces/launch/localization_launch.py)
-    - [navigation_launch.py](./cafe_robot_interfaces/launch/navigation_launch.py)
-    - [rviz_launch.py](./cafe_robot_interfaces/launch/rviz_launch.py)
-  - [maps](./cafe_robot_interfaces/maps/)
-    - [cafe_robot.pgm](./cafe_robot_interfaces/maps/cafe_robot.pgm)
-    - [cafe_robot.yaml](./cafe_robot_interfaces/maps/cafe_robot.yaml)
-  - [resource](./cafe_robot_interfaces/resource/)
-  - [robot_description](./cafe_robot_interfaces/robot_description/)
-    - [urdf](./cafe_robot_interfaces/robot_description/urdf/)
-      - [cafe_robot.urdf.xacro](./cafe_robot_interfaces/robot_description/urdf/cafe_robot.urdf.xacro)
-      - [gazebo_plugins.xacro](./cafe_robot_interfaces/robot_description/urdf/gazebo_plugins.xacro)
-      - [inertial_macros.xacro](./cafe_robot_interfaces/robot_description/urdf/inertial_macros.xacro)
-  - [worlds](./cafe_robot_interfaces/worlds/)
-    - [cafe.world](./cafe_robot_interfaces/worlds/cafe.world)
-    - [empty.world](./cafe_robot_interfaces/worlds/empty.world)
+<details>
+  <summary><strong>cafe_robot_action_planning</strong></summary>
+
+  - <details>
+      <summary><strong>cafe_robot_action_planning</strong></summary>
+
+      - [order_manager.py](./cafe_robot_action_planning/cafe_robot_action_planning/order_manager.py)  
+      - [robot_navigator.py](./cafe_robot_action_planning/cafe_robot_action_planning/robot_navigator.py)  
+
+    </details>
+
+  - <details>
+      <summary><strong>config</strong></summary>
+
+      - [bridge_params.yaml](./cafe_robot_action_planning/config/bridge_params.yaml)  
+      - [cafe_robot_config.rviz](./cafe_robot_action_planning/config/cafe_robot_config.rviz)  
+      - [nav2_default_view.rviz](./cafe_robot_action_planning/config/nav2_default_view.rviz)  
+      - [nav2_params.yaml](./cafe_robot_action_planning/config/nav2_params.yaml)  
+
+    </details>
+
+  - <details>
+      <summary><strong>launch</strong></summary>
+
+      - [bringup_launch.py](./cafe_robot_action_planning/launch/bringup_launch.py)  
+      - [gazebo.launch.py](./cafe_robot_action_planning/launch/gazebo.launch.py)  
+      - [localization_launch.py](./cafe_robot_action_planning/launch/localization_launch.py)  
+      - [navigation_launch.py](./cafe_robot_action_planning/launch/navigation_launch.py)  
+      - [rviz_launch.py](./cafe_robot_action_planning/launch/rviz_launch.py)  
+
+    </details>
+
+  - <details>
+      <summary><strong>maps</strong></summary>
+
+      - [cafe_robot.pgm](./cafe_robot_action_planning/maps/cafe_robot.pgm)  
+      - [cafe_robot.yaml](./cafe_robot_action_planning/maps/cafe_robot.yaml)  
+
+    </details>
+
+  - <details>
+      <summary><strong>robot_description</strong></summary>
+
+      - [cafe_robot.urdf.xacro](./cafe_robot_action_planning/robot_description/urdf/cafe_robot.urdf.xacro)  
+      - [gazebo_plugins.xacro](./cafe_robot_action_planning/robot_description/urdf/gazebo_plugins.xacro)  
+      - [inertial_macros.xacro](./cafe_robot_action_planning/robot_description/urdf/inertial_macros.xacro)  
+
+    </details>
+
+  - <details>
+      <summary><strong>worlds</strong></summary>
+
+      - [cafe.world](./cafe_robot_action_planning/worlds/cafe.world)  
+      - [empty.world](./cafe_robot_action_planning/worlds/empty.world)  
+
+    </details>
+
+</details>
+
+<details>
+  <summary><strong>cafe_robot_interfaces</strong></summary>
+
+  - <details>
+      <summary><strong>srv</strong></summary>
+
+      - [Order.srv](./cafe_robot_interfaces/srv/Order.srv)  
+
+    </details>
+
+</details>
+
+
 
 ## Creation of URDF 
 
@@ -126,6 +170,7 @@ ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number:
 ```code
 ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'cancel'}""
 ```
+**Note : Replace the <table_number> with integer ranging from 1 to 3**
 ## FlowChart 
 ```mermaid
 graph TD;
