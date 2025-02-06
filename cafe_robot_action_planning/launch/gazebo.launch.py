@@ -10,7 +10,6 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     pkg_name = 'cafe_robot_action_planning'
-    use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Process the URDF file using xacro
     pkg_path = os.path.join(get_package_share_directory(pkg_name))
@@ -74,7 +73,7 @@ def generate_launch_description():
         ]
     )
 
-    params = {'robot_description': robot_description, 'use_sim_time': use_sim_time}
+    params = {'robot_description': robot_description, 'use_sim_time': True}
     rsp = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -95,10 +94,4 @@ def generate_launch_description():
         spawn_entity,
         ros_gz_bridge,
         order_manager,
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='false',
-            description='Use sim time if true'
-        ),
-        
     ])

@@ -120,7 +120,7 @@
 It may take few minutes for the first launch it needs to download the models from the gazebo fuel site
 
 ```code
-ros2 launch cafe_robot_action_planning gazebo.launch.py use_sim_time:=True
+ros2 launch cafe_robot_action_planning gazebo.launch.py 
 ```
 #### Rviz2
 
