@@ -79,22 +79,29 @@ class OrderManager(Node):
 
     def update_order_status(self, request, response):
         """
-        Updates the status of an order if the table number exists.
+        Updates the status of an order. Removes completed orders from the active list.
         """
         table_number = request.table_number
         new_status = request.status
 
         if table_number in self.orders:
-            self.orders[table_number] = new_status
+            if new_status == "completed":
+                del self.orders[table_number]  # Remove the completed order
+                response.response_message = f"Order for Table {table_number} completed and removed."
+                self.get_logger().info(response.response_message)
+            else:
+                self.orders[table_number] = new_status
+                response.response_message = f"Order for Table {table_number} updated to {new_status}."
+                self.get_logger().info(response.response_message)
+
             response.accepted = True
-            response.response_message = f"Order for Table {table_number} updated to {new_status}."
-            self.get_logger().info(response.response_message)
         else:
             response.accepted = False
             response.response_message = f"No existing order for Table {table_number}."
             self.get_logger().warn(response.response_message)
 
         return response
+
     
     def reset_orders(self, response):
         """

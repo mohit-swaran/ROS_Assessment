@@ -138,6 +138,20 @@ class RobotNavigator(Node):
         else:
             self.get_logger().warn(f"Failed to update order status for Table {table_number}.")
 
+         # Remove the completed order from the active list
+        remove_request = Order.Request()
+        remove_request.table_number = table_number
+        remove_request.request_type = "update"
+        remove_request.status = "removed"  # Mark order as removed
+
+        future = self.client.call_async(remove_request)
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result() is not None and future.result().accepted:
+            self.get_logger().info(f"Order for Table {table_number} has been removed from active orders.")
+        else:
+            self.get_logger().warn(f"Failed to remove order for Table {table_number} from active list.")
+
         # Return to home
         self.navigate_to("home")
 
