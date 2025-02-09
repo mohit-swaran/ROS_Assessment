@@ -158,17 +158,17 @@ ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number:
 ```
 ### To confirm the order
 ```code
-ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'update',status = 'confirm'}""
+ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type: 'update',status:'confirmed'}""
 ```
 ### To see the order status 
 
 ```code
-ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'status'}""
+ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type: 'status'}""
 ```
 ### To cancel the order 
 
 ```code
-ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type= 'cancel'}""
+ros2 service call /order_manager cafe_robot_interfaces/srv/Order "{table_number: <table_number>, request_type:'cancel'}""
 ```
 **Note : Replace the <table_number> with integer ranging from 1 to 3**
 ## FlowChart 

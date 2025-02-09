@@ -18,7 +18,8 @@ class RobotNavigator(Node):
         # Wait for the service to be available before making requests
         while not self.client.wait_for_service(timeout_sec=1.0):
             self.get_logger().warn('Waiting for order_manager service to be available...')
-
+        
+        self.navigator.waitUntilNav2Active()
         self.get_logger().info("Robot Navigator is ready to receive orders.")
 
         # Define poses
@@ -107,7 +108,6 @@ class RobotNavigator(Node):
             self.get_logger().warn(f"Failed to update order status for Table {table_number}.")
             return
 
-        self.navigator.waitUntilNav2Active()
         self.current_pose = "Going to kitchen"
         # Navigate to the kitchen
         if not self.navigate_to("kitchen"):
@@ -129,6 +129,12 @@ class RobotNavigator(Node):
         # Navigate to the assigned table
         if not self.navigate_to(table_key):
             return
+
+        if not self.check_order_confirmation(table_number):
+            self.get_logger().info(f"Order for Table {table_number} was rejected. Cancelling delivery.")
+            self.navigate_to("home")
+            self.navigate_to("kitchen")
+            return 
 
         # Simulate food delivery
         self.get_logger().info("Delivering food...")
