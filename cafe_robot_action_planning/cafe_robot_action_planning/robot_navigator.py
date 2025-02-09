@@ -65,13 +65,6 @@ class RobotNavigator(Node):
                 for table_number, status in orders.items():
                     if status == "pending":
                         self.process_order(int(table_number))
-                    if status == "cancelled":
-                        if self.current_pose == "kitchen":
-                            self.navigate_to("home")
-                        elif self.current_pose == "table":
-                            self.navigate_to("kitchen")
-                            self.navigate_to("home")
-                        self.navigate_to("home")
                         
             else:
                 self.get_logger().warn('Failed to retrieve order status.')
@@ -84,7 +77,7 @@ class RobotNavigator(Node):
             # Home -> Kitchen -> Confirmation from kitchen -> Ordered Table number -> Return to home
 
     def process_order(self, table_number):
-        """Handles the delivery process for a specific table."""
+        """Handles the delivery process for a specific table, with cancellation handling."""
         table_key = f"table{table_number}"
 
         if table_key not in self.poses:
@@ -108,15 +101,13 @@ class RobotNavigator(Node):
             self.get_logger().warn(f"Failed to update order status for Table {table_number}.")
             return
 
-        self.current_pose = "Going to kitchen"
-        # Navigate to the kitchen
-        if not self.navigate_to("kitchen"):
+        # Navigate to the kitchen, checking for cancellation
+        if not self.navigate_to("kitchen", table_number):
+            self.get_logger().info(f"Order for Table {table_number} was cancelled during navigation. Returning home.")
+            self.navigate_to("home")
             return
         
         # Check if order is confirmed or rejected 
-        self.get_logger().info("Arrived at the kitchen. Waiting for confirmation...")
-        # Simulating the confirmation in the kitchen
-        
         if not self.check_order_confirmation(table_number):
             self.get_logger().info(f"Order for Table {table_number} was rejected. Cancelling delivery.")
             self.navigate_to("home")
@@ -125,16 +116,13 @@ class RobotNavigator(Node):
         # Simulate food pickup at the kitchen
         self.get_logger().info("Picking up food...")
         time.sleep(2)
-        self.current_pose = "Going to table"
-        # Navigate to the assigned table
-        if not self.navigate_to(table_key):
-            return
 
-        if not self.check_order_confirmation(table_number):
-            self.get_logger().info(f"Order for Table {table_number} was rejected. Cancelling delivery.")
-            self.navigate_to("home")
+        # Navigate to the assigned table, checking for cancellation
+        if not self.navigate_to(table_key, table_number):
+            self.get_logger().info(f"Order for Table {table_number} was cancelled while delivering. Returning to kitchen and home.")
             self.navigate_to("kitchen")
-            return 
+            self.navigate_to("home")
+            return
 
         # Simulate food delivery
         self.get_logger().info("Delivering food...")
@@ -152,13 +140,20 @@ class RobotNavigator(Node):
 
         # Return to home
         self.navigate_to("home")
-        self.current_pose = None
 
-    def navigate_to(self, location):
-        """Handles navigation with feedback and logging."""
+
+    def navigate_to(self, location, table_number=None):
+        """Handles navigation with feedback and logging, with cancellation check."""
         self.navigator.goToPose(self.poses[location])
 
         while not self.navigator.isTaskComplete():
+            # Periodically check for order cancellation
+            if table_number is not None and self.is_order_cancelled(table_number):
+                self.get_logger().warn(f"Order for Table {table_number} has been cancelled. Stopping navigation.")
+                self.navigator.cancelTask()  # Stop the robot immediately
+
+                return False  # Exit navigation process
+
             feedback = self.navigator.getFeedback()
             if feedback:
                 self.get_logger().info(f'Navigating to {location}: {feedback.distance_remaining:.2f} meters remaining.')
@@ -170,6 +165,7 @@ class RobotNavigator(Node):
         else:
             self.get_logger().error(f"Failed to reach {location}.")
             return False
+
     
 
     def check_order_confirmation(self, table_number, timeout_sec=5):
@@ -201,6 +197,19 @@ class RobotNavigator(Node):
         self.get_logger().warn(f"Timeout reached! No confirmation received for Table {table_number}. Cancelling order.")
         return False
 
+    def is_order_cancelled(self, table_number):
+        """Checks if the order for a specific table has been cancelled."""
+        request = Order.Request()
+        request.request_type = "status"
+
+        future = self.client.call_async(request)
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result() is not None:
+            orders = eval(future.result().response_message)  # Convert string to dictionary
+            if orders.get(table_number) == "cancelled":
+                return True  # Order is cancelled
+        return False  # Order is still active
 
 def main(args=None):
     rclpy.init(args=args)
