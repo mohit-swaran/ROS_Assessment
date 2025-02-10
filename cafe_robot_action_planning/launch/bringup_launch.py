@@ -103,7 +103,7 @@ def generate_launch_description():
 
     declare_use_localization_cmd = DeclareLaunchArgument(
         'use_localization', default_value='True',
-        description='Whether to enable localization or not'
+        description='Whether to enable localization use_or not'
     )
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
