@@ -13,6 +13,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/urdf',glob.glob('robot_description/urdf/*')),
         ('share/' + package_name + '/launch',glob.glob('launch/*launch.py')),
+        ('share/' + package_name + '/launch',glob.glob('launch/cartographer/*')),
         ('share/' + package_name + '/launch',glob.glob('launch/amcl/*')),
         ('share/' + package_name + '/config',glob.glob('config/*')),
         ('share/' + package_name + '/worlds',glob.glob('worlds/*')),
