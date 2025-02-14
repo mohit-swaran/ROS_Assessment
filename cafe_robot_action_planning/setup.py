@@ -15,6 +15,7 @@ setup(
     ('share/' + package_name + '/launch/cartographer', glob.glob('launch/cartographer/*')),
     ('share/' + package_name + '/launch', glob.glob('launch/*.launch.py')), 
     ('share/' + package_name + '/config/cartographer', glob.glob('config/cartographer/*')),
+    ('share/' + package_name + '/config/nav2', glob.glob('config/nav2/*')),
     ('share/' + package_name + '/config/gazebo', glob.glob('config/gazebo/*')),
     ('share/' + package_name + '/rviz', glob.glob('rviz/*')),
     ('share/' + package_name + '/worlds', glob.glob('worlds/*')),
