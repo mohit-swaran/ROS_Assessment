@@ -9,7 +9,7 @@ def generate_launch_description():
     # Package and file paths
     pkg_name = 'cafe_robot_action_planning'
     xacro_file = os.path.join(get_package_share_directory(pkg_name), 'urdf', 'cafe_robot.urdf.xacro')
-    rviz_config_file = os.path.join(get_package_share_directory(pkg_name), 'config', 'cafe_robot_config.rviz')
+    rviz_config_file = os.path.join(get_package_share_directory(pkg_name), 'rviz', 'cafe_robot_config.rviz')
 
     # Xacro file to generate URDF
     robot_description_config = xacro.process_file(xacro_file)
