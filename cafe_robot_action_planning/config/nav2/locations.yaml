@@ -1,0 +1,6 @@
+
+# Defines object locations as [x, y, theta]
+location1: [0.0, 0.0, 0.0]
+location2: [4.0, 2.0, 0.0]
+location3: [4.4, -4.0, 0.0]
+location4: [4.8, -8.0, 0.0]
