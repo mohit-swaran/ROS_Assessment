@@ -59,7 +59,7 @@ def generate_launch_description():
         ]
     )
 
-    bridge_params = os.path.join(get_package_share_directory(pkg_name), 'config', 'gazebo','bridge_params_ign.yaml')
+    bridge_params = os.path.join(get_package_share_directory(pkg_name), 'config','gazebo', 'bridge_params_ign.yaml')
     ros_gz_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
@@ -86,8 +86,20 @@ def generate_launch_description():
         output='screen',
     )
 
-    # mrpt_map_server = IncludeLaunchDescription(
-    # PythonLaunchDescriptionSource(os.path.join(pkg_path,'launch','mrpt','map_server.launch.py')))
+    mrpt_pf_localization= IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(pkg_path,'launch','mrpt','mrpt_localization.launch.py')),
+        launch_arguments = {'use_composable' : 'false',
+                            'log_level': 'INFO',
+                            'log_level_core': "INFO",
+                            'topic_sensors_2d_scan': '/scan',
+                            'base_link_frame_id':'base_link',
+                            'odom_frame_id': 'odom',
+                            'use_sim_time':'true',
+                            'global_frame_id': 'map'}.items()
+    )
+
+    mrpt_map_server = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(pkg_path,'launch','mrpt','map_server.launch.py')))
 
     # Return the LaunchDescription
     return LaunchDescription([
@@ -96,6 +108,7 @@ def generate_launch_description():
         world_arg,
         spawn_entity,
         ros_gz_bridge,
+        mrpt_pf_localization,
+        mrpt_map_server,
         order_manager,
-        # mrpt_map_server
     ])
