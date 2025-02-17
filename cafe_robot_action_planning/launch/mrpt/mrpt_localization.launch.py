@@ -35,7 +35,7 @@ def generate_launch_description():
 
     relocalization_params_file_launch_arg = DeclareLaunchArgument(
         "relocalization_params_file", default_value=TextSubstitution(
-            text=os.path.join(pfLocDir, 'config','mrpt_pf' ,'default-relocalization-pipeline.yaml')))
+            text=os.path.join(pfLocDir, 'config','mrpt_pf','default-relocalization-pipeline.yaml')))
 
     pf_log_level_launch_arg = DeclareLaunchArgument(
         "log_level",
